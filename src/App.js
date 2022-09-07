@@ -9,29 +9,17 @@ import {
 } from '@mui/material'
 import { initDatos } from './utils/tareas'
 import TareasTabs from './TareasTabs'
-import { getPendientes, getTerminadas } from './utils/tareas'
 import Loading from './components/Loading'
 import { useStoreState } from 'easy-peasy'
 
 export default function App() {
-  const { loading } = useStoreState(state => ({
-    loading: state.loading
+  const { loading, terminadas, pendientes } = useStoreState(state => ({
+    loading: state.loading,
+    terminadas: state.terminadas,
+    pendientes: state.pendientes
   }))
-  const [counts, setCounts] = useState({
-    pendientes: 0,
-    terminadas: 0
-  })
-  const getCounts = async () => {
-    const requests = [getPendientes(), getTerminadas()]
-    const response = await Promise.all(requests)
-    setCounts({
-      pendientes: response[0].length,
-      terminadas: response[1].length
-    })
-  }
   useEffect(() => {
     initDatos()
-    getCounts()
   }, [])
   return <>
     <AppBar position="static">
@@ -46,10 +34,10 @@ export default function App() {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Badge badgeContent={counts.pendientes} color="error">
+            <Badge badgeContent={pendientes.length} color="error">
               <span style={{fontSize: '1.5em'}}>⏳</span>
             </Badge>
-            <Badge badgeContent={counts.terminadas} color="error">
+            <Badge badgeContent={terminadas.length} color="error">
               <span style={{fontSize: '1.5em'}}>✔️</span>
             </Badge>
         </Box>

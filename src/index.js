@@ -11,11 +11,11 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
-  <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <StoreProvider store={store}>
-      <App />
-    </StoreProvider>
-  </ThemeProvider>,
+  <StoreProvider store={store}>
+    <ThemeProvider theme={theme}>
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
+        <App />
+    </ThemeProvider>
+  </StoreProvider>,
 );

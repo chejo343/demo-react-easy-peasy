@@ -1,33 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   List,
   ListItem,
   ListItemText
 } from '@mui/material'
-import { getTerminadas } from '../utils/tareas'
-import Loading from './Loading'
+import { useStoreState } from 'easy-peasy'
 
 const Terminadas = () => {
-  const [loading, setLoading] = useState(false)
-  const [items, setItems] = useState([])
-  const getItems = async () => {
-    try {
-      setLoading(true)
-      const data = await getTerminadas()
-      setItems(data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-  useEffect(() => {
-    getItems()
-  }, [])
+  const { terminadas } = useStoreState(state => ({
+    terminadas: state.terminadas
+  }))
   return <>
     <List>
       {
-        items.map((i, idx) => <ListItem key={idx} alignItems="flex-start">
+        terminadas.map((i, idx) => <ListItem key={idx} alignItems="flex-start">
           <ListItemText
             primary={i.tarea.toUpperCase()}
             secondary={ i.encargado }
@@ -35,7 +21,6 @@ const Terminadas = () => {
         </ListItem>)
       }
     </List>
-    <Loading open={loading} />
   </>
 }
 

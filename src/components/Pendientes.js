@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   List,
   ListItem,
@@ -6,35 +6,25 @@ import {
   ListItemAvatar,
   IconButton
 } from '@mui/material'
-import { getPendientes, cambiarEstado } from '../utils/tareas'
-import Loading from './Loading'
+import { cambiarEstado } from '../utils/tareas'
+import { useStoreActions, useStoreState } from 'easy-peasy'
 
-const Pendientes = () => {
-  const [loading, setLoading] = useState(false)
-  const [items, setItems] = useState([])
-  const getItems = async () => {
-    try {
-      setLoading(true)
-      const data = await getPendientes()
-      setItems(data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+const Pendientes = ({ refresh }) => {
+  const { pendientes } = useStoreState(state => ({
+    pendientes: state.pendientes
+  }))
+  const { setLoading } = useStoreActions(actions => ({
+    setLoading: actions.setLoading
+  }))
   const marcarTerminada = async (index) => {
     setLoading(true)
     await cambiarEstado(index, 'terminada')
-    await getItems()
+    refresh()
   }
-  useEffect(() => {
-    getItems()
-  }, [])
   return <>
     <List>
       {
-        items.map((i, idx) => <ListItem key={idx} alignItems="flex-start">
+        pendientes.map((i, idx) => <ListItem key={idx} alignItems="flex-start">
           <ListItemAvatar>
             <IconButton onClick={() => marcarTerminada(i.index)}>✔️</IconButton>
           </ListItemAvatar>
@@ -45,7 +35,6 @@ const Pendientes = () => {
         </ListItem>)
       }
     </List>
-    <Loading open={loading} />
   </>
 }
 

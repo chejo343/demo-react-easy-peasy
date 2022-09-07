@@ -1,10 +1,12 @@
 import tareasStore from "./tareasStore";
-import { action } from "easy-peasy";
+import { action, createStore } from "easy-peasy";
 
-export default {
+const store =  {
   loading: false,
   setLoading: action((state, payload) => {
     state.loading = payload
   }),
   ...tareasStore
 }
+
+export default createStore(store)
