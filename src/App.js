@@ -10,8 +10,13 @@ import {
 import { initDatos } from './utils/tareas'
 import TareasTabs from './TareasTabs'
 import { getPendientes, getTerminadas } from './utils/tareas'
+import Loading from './components/Loading'
+import { useStoreState } from 'easy-peasy'
 
 export default function App() {
+  const { loading } = useStoreState(state => ({
+    loading: state.loading
+  }))
   const [counts, setCounts] = useState({
     pendientes: 0,
     terminadas: 0
@@ -55,5 +60,6 @@ export default function App() {
         <TareasTabs />
       </Box>
     </Container>
+    <Loading open={loading} />
   </>
 }
